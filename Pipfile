@@ -1,0 +1,35 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+belogging = "*"
+django = "*"
+django-extensions = "*"
+django-log-request-id = "*"
+django-mysql = "*"
+djangorestframework = "*"
+dj-database-url = "*"
+drf-yasg = "*"
+mysqlclient = "*"
+mysql-connector-python = "*"
+prettyconf = "*"
+whitenoise = "*"
+djangorestframework-jsonmask = "*"
+
+[dev-packages]
+# pinned because pre-release is global to pipfiles
+black = "==19.3b0"
+ipdb = "*"
+ipython = "*"
+factory_boy = "*"
+pre-commit = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-deadfixtures = "*"
+pytest-django = "*"
+pytest-randomly = "*"
+
+[requires]
+python_full_version = "3.7.3"
