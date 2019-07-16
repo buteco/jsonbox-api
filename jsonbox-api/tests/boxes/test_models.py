@@ -1,13 +1,13 @@
 import pytest
 from django.db import IntegrityError
 
-from apps.boxes.models import Box
+from .factories import BoxFactory
 
 pytestmark = pytest.mark.django_db
 
 
 def test_create_box():
-    box = Box.objects.create_for_username("box sample", "boxuser")
+    box = BoxFactory(box_name="box sample", username="boxuser")
     assert box
     assert box.name == "box-sample"
     assert box.token
@@ -15,4 +15,4 @@ def test_create_box():
 
 def test_duplicate_box(box):
     with pytest.raises(IntegrityError):
-        Box.objects.create_for_username(box.name, box.name)
+        BoxFactory(box_name=box.name, username=box.name)

@@ -1,6 +1,6 @@
 import pytest
 
-from apps.jsons.models import Json
+from .factories import JsonFactory
 
 pytestmark = pytest.mark.django_db
 
@@ -8,13 +8,13 @@ pytestmark = pytest.mark.django_db
 @pytest.mark.parametrize(
     "data", [{"key": "value"}, {"key": 1234}, {"key": ["val", "ue"]}, {"key": {"is": "nested"}}]
 )
-def test_create_json(box, data):
-    js = Json.objects.create(box=box, data=data)
+def test_create_json(data):
+    js = JsonFactory(data=data)
 
     assert js.data == data
 
 
 def test_create_json_default(box):
-    js = Json.objects.create(box=box)
+    js = JsonFactory(box=box)
 
     assert js.data == {}

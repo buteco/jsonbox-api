@@ -25,7 +25,7 @@ def test_box_create_already_exists(box):
     with pytest.raises(CommandError) as exc:
         call_command("box_create", box.name)
 
-    assert "already exists" in str(exc)
+    assert "already exists" in str(exc.value)
 
 
 def test_box_list(box):
