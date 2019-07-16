@@ -42,6 +42,11 @@ Available management commands:
 * `box_create`: create a box instance
 * `box_list`: list all boxes and the associated token
 
+
+### License
+
+[MIT](LICENSE)
+
 ### Similar projects
 
 * [jsonbin](https://jsonbin.io/)
