@@ -1,21 +1,17 @@
 import pytest
 from rest_framework.test import APIClient
 
-from apps.boxes.models import Box
+from .boxes.factories import BoxFactory
 
 
 @pytest.fixture
 def box():
-    box = Box.objects.create_for_username("bobox", "bobox")
-    box.save()
-    return box
+    return BoxFactory(box_name="bobox", username="bobox")
 
 
 @pytest.fixture
 def box_secondary():
-    box = Box.objects.create_for_username("bombox", "bombox")
-    box.save()
-    return box
+    return BoxFactory(box_name="bombox", username="bombox")
 
 
 @pytest.fixture
