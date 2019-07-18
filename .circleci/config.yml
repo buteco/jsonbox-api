@@ -1,0 +1,104 @@
+version: 2
+jobs:
+  core_build: &core-build
+    docker:
+      - image: circleci/python:3.7.3-stretch
+        environment:
+            LOG_LEVEL: DEBUG
+            LOGGERS: jsonbox_api
+            SECRET_KEY: SUPER-SEKRET
+            PASSWORD_HASHER: UnsaltedMD5PasswordHasher
+            DATABASE_URL: mysql://root:@127.0.0.1:3306/circle_test
+            SSL_REDIRECT: false
+
+      - image: circleci/mysql:5.7
+        environment:
+          MYSQL_ALLOW_EMPTY_PASSWORD: true
+          MYSQL_USER: root
+          MYSQL_DATABASE: circle_test
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          name: "Restoring dependencies cache"
+          keys:
+          - v1-dependencies-{{ checksum "Pipfile.lock" }}
+
+      - run:
+          name: install system dependencies
+          command: sudo pip install pipenv
+
+      - run:
+          name: install dependencies
+          command: pipenv install --dev --deploy
+
+      - run:
+          name: run migrations
+          command: |
+            cd $(dirname $(find -name manage.py | head -1)) && pipenv run python manage.py migrate
+
+      - save_cache:
+          name: "Saving dependencies cache"
+          paths:
+            - /home/circleci/.local/share/virtualenvs/
+          key: v1-dependencies-{{ checksum "Pipfile.lock" }}
+
+      - restore_cache:
+          name: "Restoring hooks cache"
+          key: v1-hooks-{{ checksum ".pre-commit-config.yaml" }}
+
+      - run:
+          name: linters
+          command: SKIP=no-commit-to-branch pipenv run pre-commit run -a -v
+
+      - save_cache:
+          name: "Saving hooks cache"
+          paths:
+            - /home/circleci/.cache/pre-commit/
+          key: v1-hooks-{{ checksum ".pre-commit-config.yaml" }}
+
+      - run:
+          name: run tests
+          command: |
+            pipenv run pytest -vv -s $(dirname $(find -name manage.py | head -1))/ --cov $(dirname $(find -name manage.py | head -1))/apps --cov-report=term-missing --cov-report=html
+
+      - run:
+          name: dead-fixtures-check
+          command: pipenv run pytest $(dirname $(find -name manage.py | head -1))/ --dead-fixtures
+
+      - run:
+          name: check missing migrations
+          command: cd $(dirname $(find -name manage.py | head -1)) && pipenv run python manage.py makemigrations --check
+
+      - run:
+          name: django system check
+          command: cd $(dirname $(find -name manage.py | head -1)) && pipenv run python manage.py check
+
+      - store_artifacts:
+          path: htmlcov
+          destination: test-reports
+
+branches:
+  only:
+    - master
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - core_build
+
+  scheduled:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only: master
+
+    jobs:
+      - core_build
