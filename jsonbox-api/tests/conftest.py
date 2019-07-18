@@ -6,16 +6,12 @@ from .boxes.factories import BoxFactory
 
 @pytest.fixture
 def box():
-    box = BoxFactory(box_name="bobox", username="bobox")
-    box.save()
-    return box
+    return BoxFactory(box_name="bobox", username="bobox")
 
 
 @pytest.fixture
 def box_secondary():
-    box = BoxFactory(box_name="bombox", username="bombox")
-    box.save()
-    return box
+    return BoxFactory(box_name="bombox", username="bombox")
 
 
 @pytest.fixture

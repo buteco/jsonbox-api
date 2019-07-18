@@ -9,9 +9,7 @@ pytestmark = pytest.mark.django_db
 
 @pytest.fixture
 def sample_json(box):
-    js = JsonFactory(box=box, data={"key": "value", "lol": {"name": "hue", "age": 1}})
-    js.save()
-    return js
+    return JsonFactory(box=box, data={"key": "value", "lol": {"name": "hue", "age": 1}})
 
 
 @pytest.mark.parametrize("method", ["get", "post", "put", "patch", "delete"])
