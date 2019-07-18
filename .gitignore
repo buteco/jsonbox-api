@@ -49,3 +49,6 @@ docs/_build/
 .pytest.restar
 
 .env
+.venv
+
+.python-version
