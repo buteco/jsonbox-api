@@ -112,7 +112,7 @@ SWAGGER_SETTINGS = {
     "REFETCH_SCHEMA_WITH_AUTH": True,
     "REFETCH_SCHEMA_ON_LOGOUT": True,
     "DEFAULT_MODEL_DEPTH": 1,
-    "DEFAULT_MODEL_RENDERING": "example",
+    "DEFAULT_MODEL_RENDERING": "model",
     "SUPPORTED_SUBMIT_METHODS": ("get",),
     "SECURITY_DEFINITIONS": {"Token": {"type": "apiKey", "name": "Authorization", "in": "header"}},
 }
