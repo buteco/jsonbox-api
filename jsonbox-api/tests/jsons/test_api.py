@@ -51,6 +51,48 @@ def test_get_jsons_with_jsonmask(client_api, sample_json):
     assert data["results"][0] == {"data": {"lol": {"name": "hue"}}}
 
 
+@pytest.mark.parametrize("search", ["key:value", "data__key:value"])
+def test_get_jsons_filter_simple(client_api, sample_json, search):
+    url = reverse("jsons:jsons-list") + "?search={}".format(search)
+    response = client_api.get(url)
+
+    assert response.status_code == status.HTTP_200_OK
+    data = response.json()
+    assert data["count"] == 1
+    assert data["results"][0]["data"]["key"] == "value"
+
+
+@pytest.mark.parametrize(
+    "search,expected",
+    [
+        ("key:value", 2),
+        ("lol:yolo", 1),
+        ("lol:", 1),
+        ("key:value,lol:yolo", 1),
+        ("key:value,lol:", 1),
+        ("key:,lol:yolo", 0),
+        ("key:,lol:", 0),
+    ],
+)
+def test_get_jsons_filter_by_multiple_keys(client_api, box, search, expected):
+    JsonFactory(box=box, data={"key": "value", "lol": "yolo"})
+    JsonFactory(box=box, data={"key": "value", "lol": ""})
+    url = reverse("jsons:jsons-list") + "?search={}".format(search)
+    response = client_api.get(url)
+
+    assert response.status_code == status.HTTP_200_OK
+    data = response.json()
+    assert data["count"] == expected
+
+
+@pytest.mark.parametrize("search", ["value", "some:value,other"])
+def test_get_jsons_filter_with_invalid_search(client_api, search):
+    url = reverse("jsons:jsons-list") + "?search={}".format(search)
+    response = client_api.get(url)
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
 def test_get_json_detail(client_api, sample_json):
     url = reverse("jsons:jsons-detail", [sample_json.id])
     response = client_api.get(url)
