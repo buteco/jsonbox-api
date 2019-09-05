@@ -13,7 +13,7 @@ class JsonDataFilter(filters.BaseFilterBackend):
     Simple filter to query Json model using a custom notation.
     Querystrings are expected to be formatted as "search=key1:value1,key2:value".
 
-    Those pairs of keys and values should exists in the JsonField of the related model,
+    Those pairs of keys and values should exist in the JsonField of the related model,
     but not all fields are required in order to perform the filtering.
 
     Filter limitations:
