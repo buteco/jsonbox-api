@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 belogging = "*"
-django = "*"
+django = "~=2.2.8"
 django-extensions = "*"
 django-log-request-id = "*"
 django-mysql = "*"
