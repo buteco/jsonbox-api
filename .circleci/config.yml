@@ -53,7 +53,7 @@ jobs:
 
       - run:
           name: linters
-          command: SKIP=no-commit-to-branch pipenv run pre-commit run -a -v
+          command: SKIP=no-commit-to-branch,pipenv-check pipenv run pre-commit run -a -v
 
       - save_cache:
           name: "Saving hooks cache"
