@@ -3,7 +3,7 @@ import factory
 from apps.boxes.models import Box
 
 
-class BoxFactory(factory.DjangoModelFactory):
+class BoxFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Box
 
