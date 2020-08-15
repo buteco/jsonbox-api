@@ -1,6 +1,6 @@
 repos:
 - repo: git@github.com:pre-commit/pre-commit-hooks
-  rev: v3.1.0
+  rev: v3.2.0
   hooks:
     - id: debug-statements
     - id: trailing-whitespace
@@ -38,20 +38,19 @@ repos:
       types: [python]
 
 - repo: https://gitlab.com/pycqa/flake8
-  rev: 3.8.2
+  rev: 3.8.3
   hooks:
     - id: flake8
       args: ['--exclude=docs/*,*migrations*', '--ignore=E501,W503,E203']
 
-- repo: https://github.com/pre-commit/mirrors-isort
-  rev: v4.3.21
+- repo: https://github.com/timothycrosley/isort
+  rev: 5.4.2
   hooks:
     - id: isort
       args: ['--check-only', '--diff']
-      additional_dependencies: ['toml']
 
 - repo: https://github.com/pre-commit/pygrep-hooks
-  rev: v1.5.1
+  rev: v1.6.0
   hooks:
     - id: python-check-mock-methods
 
