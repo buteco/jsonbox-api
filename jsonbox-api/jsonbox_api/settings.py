@@ -1,8 +1,10 @@
 from pathlib import Path
 
 import belogging
+import sentry_sdk
 from dj_database_url import parse as parse_db_url
 from prettyconf import config
+from sentry_sdk.integrations.django import DjangoIntegration
 
 # Project Structure
 BASE_DIR = Path(__file__).absolute().parents[2]
@@ -116,3 +118,9 @@ SWAGGER_SETTINGS = {
     "SUPPORTED_SUBMIT_METHODS": ("get",),
     "SECURITY_DEFINITIONS": {"Token": {"type": "apiKey", "name": "Authorization", "in": "header"}},
 }
+
+# Sentry
+sentry_sdk.init(
+    dsn=config("SENTRY_DSN", default=None),
+    integrations=[DjangoIntegration()],
+)
