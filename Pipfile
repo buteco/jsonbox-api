@@ -17,6 +17,7 @@ mysql-connector-python = "*"
 prettyconf = "*"
 whitenoise = "*"
 djangorestframework-jsonmask = "*"
+sentry-sdk = "*"
 
 [dev-packages]
 # pinned because pre-release is global to pipfiles
